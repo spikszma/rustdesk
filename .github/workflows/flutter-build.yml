@@ -125,11 +125,11 @@ jobs:
           folder: './flutter/build/windows/runner/Release/'
           recursive: true
 
-      - name: Replace RustDeskIddDriver certificate
-        if: env.WINDOWS_CER_BASE64 != null
-        run: |
-          $env:WINDOWS_CER_BASE64 | Out-File ${env:TEMP}\RustDeskIddDriver.base64
-          CertUtil.exe -f -decode ${env:TEMP}\RustDeskIddDriver.base64 .\flutter\build\windows\runner\Release\RustDeskIddDriver.cer
+      # - name: Replace RustDeskIddDriver certificate
+      #   if: env.WINDOWS_CER_BASE64 != null
+      #   run: |
+      #     $env:WINDOWS_CER_BASE64 | Out-File ${env:TEMP}\RustDeskIddDriver.base64
+      #     CertUtil.exe -f -decode ${env:TEMP}\RustDeskIddDriver.base64 .\flutter\build\windows\runner\Release\RustDeskIddDriver.cer
 
       - name: Build self-extracted executable
         shell: bash
