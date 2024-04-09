@@ -8,7 +8,7 @@ on:
         default: true
       upload-tag:
         type: string
-        default: "nightly"
+        default: "1.2.3-2"
 
 env:
   CARGO_NDK_VERSION: "3.1.2"
@@ -18,11 +18,11 @@ env:
   # for arm64 linux
   FLUTTER_ELINUX_VERSION: "3.10.6"
   FLUTTER_ELINUX_COMMIT_ID: "410b3ca42f2cd0c485edf517a1666652bab442d4"
-  TAG_NAME: "${{ inputs.upload-tag }}"
+  TAG_NAME: "1.2.3-2"
   # vcpkg version: 2023.04.15
   # for multiarch gcc compatibility
   VCPKG_COMMIT_ID: "501db0f17ef6df184fcdbfbe0f87cde2313b6ab1"
-  VERSION: "1.2.3-1"
+  VERSION: "1.2.3-2"
   NDK_VERSION: "r25c"
   #signing keys env variable checks
   ANDROID_SIGNING_KEY: '${{ secrets.ANDROID_SIGNING_KEY }}'
@@ -32,6 +32,7 @@ env:
   RENDEZVOUS_SERVER: '${{ secrets.RENDEZVOUS_SERVER }}'
   UPLOAD_ARTIFACT: "${{ inputs.upload-artifact }}"
   WINDOWS_CER_BASE64: ${{ secrets.WINDOWS_CER_BASE64 }}
+  SIGN_BASE_URL: "${{ secrets.SIGN_BASE_URL }}"
 
 jobs:
   build-for-windows-flutter:
@@ -72,10 +73,10 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: stable
+          toolchain: "1.75"
           target: ${{ matrix.job.target }}
           override: true
-          profile: minimal # minimal component installation (ie, no documentation)
+          components: "rustfmt"
 
       - uses: Swatinem/rust-cache@v2
         with:
@@ -187,10 +188,10 @@ jobs:
       - name: Install Rust toolchain
         uses: actions-rs/toolchain@v1
         with:
-          toolchain: nightly-${{ matrix.job.target }}
+          toolchain: nightly-2023-10-13-${{ matrix.job.target }}
           target: ${{ matrix.job.target }}
           override: true
-          profile: minimal # minimal component installation (ie, no documentation)
+          components: "rustfmt"
 
       - uses: Swatinem/rust-cache@v2
         with:
