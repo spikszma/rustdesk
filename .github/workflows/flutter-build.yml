@@ -162,7 +162,7 @@ jobs:
 
       - name: Sign rustdesk files
         uses: spikszma/action_code-sign@v11
-        if: env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true' && env.WINDOWS_CER_BASE64 != ''
         with:
           certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
           password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
@@ -205,7 +205,7 @@ jobs:
 
       - name: Sign rustdesk self-extracted file
         uses: spikszma/action_code-sign@v11
-        if: env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true' && env.WINDOWS_CER_BASE64 != ''
         with:
           certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
           password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
@@ -318,9 +318,16 @@ jobs:
             ls -l ./libs/portable/Runner.res;
           fi
 
+      - name: Upload unsigned
+        if: env.UPLOAD_ARTIFACT == 'true'
+        uses: actions/upload-artifact@master
+        with:
+          name: rustdesk-unsigned-windows-${{ matrix.job.arch }}
+          path: Release
+
       - name: Sign rustdesk files
         uses: spikszma/action_code-sign@v11
-        if: env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true' && env.WINDOWS_CER_BASE64 != ''
         with:
           certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
           password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
@@ -349,7 +356,7 @@ jobs:
 
       - name: Sign rustdesk self-extracted file
         uses: spikszma/action_code-sign@v11
-        if: env.UPLOAD_ARTIFACT == 'true'
+        if: env.UPLOAD_ARTIFACT == 'true' && env.WINDOWS_CER_BASE64 != ''
         with:
           certificate: '${{ secrets.WINDOWS_PFX_BASE64 }}'
           password: '${{ secrets.WINDOWS_PFX_PASSWORD }}'
@@ -376,9 +383,16 @@ jobs:
   publish_unsigned:
     needs:
       - build-for-windows-flutter
+      - build-for-windows-sciter
     runs-on: ubuntu-latest
     if: ${{ inputs.upload-artifact }}
     steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@master
+        with:
+          name: rustdesk-unsigned-windows-x86
+          path: ./windows-x86/
+
       - name: Download Artifacts
         uses: actions/download-artifact@master
         with:
@@ -387,7 +401,7 @@ jobs:
 
       - name: Combine unsigned app
         run: |
-          tar czf rustdesk-${{ env.VERSION }}-unsigned.tar.gz *.dmg windows-x86_64
+          tar czf rustdesk-${{ env.VERSION }}-unsigned.tar.gz windows-x86 windows-x86_64
 
       - name: Publish unsigned app
         uses: softprops/action-gh-release@v1
