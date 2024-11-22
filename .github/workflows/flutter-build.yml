@@ -587,7 +587,6 @@ jobs:
           env: |
             RS_PUB_KEY: "${{ secrets.RS_PUB_KEY }}"
             RENDEZVOUS_SERVER: "${{ secrets.RENDEZVOUS_SERVER }}"
-            API_SERVER: "${{ secrets.API_SERVER }}"
           install: |
             apt-get update -y
             echo -e "installing deps"
