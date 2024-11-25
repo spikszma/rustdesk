@@ -194,13 +194,6 @@ jobs:
           folder: './rustdesk/'
           recursive: true
 
-      # - name: Sign rustdesk files
-      #   if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
-      #   shell: bash
-      #   run: |
-      #     pip3 install requests argparse
-      #     BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./rustdesk/
-
       - name: Build self-extracted executable
         shell: bash
         if: env.UPLOAD_ARTIFACT == 'true'
@@ -236,12 +229,6 @@ jobs:
           # certificatename: '${{ secrets.WINDOWS_PFX_NAME }}'
           folder: './SignOutput'
           recursive: false
-
-      # - name: Sign rustdesk self-extracted file
-      #   if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
-      #   shell: bash
-      #   run: |
-      #     BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput
 
       - name: Publish Release
         uses: softprops/action-gh-release@v1
@@ -380,13 +367,6 @@ jobs:
           folder: './Release/'
           recursive: true
 
-      # - name: Sign rustdesk files
-      #   if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
-      #   shell: bash
-      #   run: |
-      #     pip3 install requests argparse
-      #     BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./Release/
-
       - name: Build self-extracted executable
         shell: bash
         run: |
@@ -408,12 +388,6 @@ jobs:
           # certificatename: '${{ secrets.WINDOWS_PFX_NAME }}'
           folder: './SignOutput'
           recursive: false
-
-      # - name: Sign rustdesk self-extracted file
-      #   if: env.UPLOAD_ARTIFACT == 'true' && env.SIGN_BASE_URL != ''
-      #   shell: bash
-      #   run: |
-      #     BASE_URL=${{ secrets.SIGN_BASE_URL }} SECRET_KEY=${{ secrets.SIGN_SECRET_KEY }} python3 res/job.py sign_files ./SignOutput/
 
       - name: Publish Release
         uses: softprops/action-gh-release@v1
@@ -475,14 +449,6 @@ jobs:
               deb_arch: amd64,
               vcpkg-triplet: x64-linux,
             }
-          # - {
-          #     arch: aarch64,
-          #     target: aarch64-unknown-linux-gnu,
-          #     distro: ubuntu18.04,
-          #     on: [self-hosted, Linux, ARM64],
-          #     deb_arch: arm64,
-          #     vcpkg-triplet: arm64-linux,
-          #   }
     steps:
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@v6
