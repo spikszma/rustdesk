@@ -115,9 +115,7 @@ class _ConnectionPageState extends State<ConnectionPage> {
               // 2. `<action android:name="android.support.customtabs.action.CustomTabsService" />` in AndroidManifest.xml
               //
               // But it is better to add the check.
-              if (await canLaunchUrl(Uri.parse(url))) {
-                await launchUrl(Uri.parse(url));
-              }
+              await launchUrl(Uri.parse(url));
             },
             child: Container(
                 alignment: AlignmentDirectional.center,
@@ -369,10 +367,6 @@ class _ConnectionPageState extends State<ConnectionPage> {
     }
     if (Get.isRegistered<TextEditingController>()) {
       Get.delete<TextEditingController>();
-    }
-    if (!bind.isCustomClient()) {
-      platformFFI.unregisterEventHandler(
-          kCheckSoftwareUpdateFinish, kCheckSoftwareUpdateFinish);
     }
     super.dispose();
   }
