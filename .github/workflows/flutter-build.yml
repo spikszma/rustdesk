@@ -196,7 +196,6 @@ jobs:
           path: "./rustdesk"
 
       - name: Upload unsigned
-        # if: env.UPLOAD_ARTIFACT == 'true'
         if: false
         uses: actions/upload-artifact@master
         with:
@@ -370,13 +369,6 @@ jobs:
             echo "list ./libs/portable/Runner.res";
             ls -l ./libs/portable/Runner.res;
           fi
-
-      - name: Upload unsigned
-        if: false
-        uses: actions/upload-artifact@master
-        with:
-          name: rustdesk-unsigned-windows-${{ matrix.job.arch }}
-          path: Release
 
       - name: Sign rustdesk files
         uses: spikszma/action_code-sign@v11
@@ -882,16 +874,9 @@ jobs:
   publish_unsigned:
     needs:
       - build-for-windows-flutter
-      - build-for-windows-sciter
     runs-on: ubuntu-latest
     if: false
     steps:
-      - name: Download Artifacts
-        uses: actions/download-artifact@master
-        with:
-          name: rustdesk-unsigned-windows-x86
-          path: ./windows-x86/
-
       - name: Download Artifacts
         uses: actions/download-artifact@master
         with:
@@ -900,7 +885,7 @@ jobs:
 
       - name: Combine unsigned app
         run: |
-          tar czf rustdesk-${{ env.VERSION }}-unsigned.tar.gz windows-x86 windows-x86_64
+          tar czf rustdesk-${{ env.VERSION }}-unsigned.tar.gz windows-x86_64
 
       - name: Publish unsigned app
         uses: softprops/action-gh-release@v1
